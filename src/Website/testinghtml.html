@@ -1,0 +1,418 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Dynamic Dropdown Menu</title>
+</head>
+<body>
+<button onclick="toggleDropdownOptions()">Toggle Options</button>
+<select id="dropdown">
+  <option value="default">Select an option</option>
+</select>
+<script>
+
+let originalOptions = [
+  { text: "Option 1", value: "option1" },
+  { text: "Option 2", value: "option2" },
+  { text: "Option 3", value: "option3" }
+];
+
+let alternativeOptions = [
+  { text: "Option 4", value: "option4" },
+  { text: "Option 5", value: "option5" },
+  { text: "Option 6", value: "option6" }
+];
+
+let isOriginalOptions = true;
+
+function toggleDropdownOptions() {
+  var dropdown = document.getElementById("dropdown");
+  var options = dropdown.options;
+
+  // Clear existing options
+  while (options.length > 1) {
+    dropdown.remove(1);
+  }
+
+  // Toggle between original and alternative options
+  if (isOriginalOptions) {
+    originalOptions.forEach(option => {
+      dropdown.add(new Option(option.text, option.value));
+    });
+    isOriginalOptions = false;
+  } else {
+    alternativeOptions.forEach(option => {
+      dropdown.add(new Option(option.text, option.value));
+    });
+    isOriginalOptions = true;
+  }
+}
+
+</script>
+</body>
+</html>
+
+<html>
+     <head>
+        <link rel="stylesheet" href="styles.css">
+        
+        <title> 
+            ESP32 Webpage Testing
+        </title>
+     </head>
+
+     <body>
+
+        <hl> 
+            cskfbfhb
+        </hl>
+
+
+ <title>Guitar FX Control</title>
+  
+</head>
+<body>
+  <h1>Guitar FX Control</h1>
+  <h2> Controls</h2>
+  
+ 
+
+  <h2>FX Selector</h2>
+  <select id="selector" >
+  <!-- onchange="updateSelector()"> -->
+  </select>
+  <p>You selected: <span id="selectedValue"></span></p> <!-- sainity check for selected value -->
+    
+
+
+  <h3>Internal or External FX</h3>
+  <!-- <button type = "button" onclick ="change()" value = External>sefdbg </button>  -->
+  <input
+   onclick="change()" type="button" value="External" id="myButton1">
+  </input>
+
+
+<br>
+
+<h3>Control 1</h3>
+  <input type="range" min="0" max="100" value="50" class="slider" id="ctr1">
+  Value: <span id='value1'></span> </span>%<br>
+
+<h3>Control 2</h3>
+  <input type="range" min="0" max="100" value="50" class="slider" id="ctr2">
+  Value: <span id='value2'></span> </span>%<br>
+
+  <h3>Control 3</h3>
+    <input type="range" min="0" max="100" value="50" class="slider" id="ctr3">
+    Value: <span id='value3'></span> </span>%<br>
+  
+
+
+
+
+
+
+
+<script>
+
+//
+//document.getElementById('ctr1').addEventListener('click')
+
+
+
+// var slider1 = getElementById("ctr1");
+// slider1.addEventListener('click', slider1_change)
+
+
+// function slider1_change(){
+//   var l_crt1 = slider1.value;
+//   console.log(l_crt1);
+
+
+// }
+
+var Socket;
+
+function init() {
+  Socket = new WebSocket('ws://' + window.location.hostname + ':81/');
+  Socket.onmessage = function(event){
+    processCommand(event);
+  };
+}
+
+
+
+
+
+// selector change/toggle code
+let currentState = 'original';
+function change() {
+  var selector = document.getElementById("selector");
+  var originalOptions = [
+    { text: 'E1', value: 'E1' },
+    { text: 'E2', value: 'E2' },
+    { text: 'E3', value: 'E3' },
+    { text: 'E4', value: 'E4' },
+    { text: 'E5', value: 'E5' },
+    { text: 'E6', value: 'E6' },
+    { text: 'E7', value: 'E7' },
+    { text: 'E8', value: 'E8' },
+  ];
+  var newOptions = [
+    { text: 'P1', value: 'P1' },
+    { text: 'P2', value: 'P2' },
+    { text: 'P3', value: 'P3' },
+    { text: 'P4', value: 'P4' },
+    { text: 'P5', value: 'P5' },
+    { text: 'P6', value: 'P6' },
+    { text: 'P7', value: 'P7' },
+    { text: 'P8', value: 'P8' },
+  ];
+
+  if (currentState === 'original') {
+    currentState = 'new';
+    updateOptions(selector, newOptions);
+  } else {
+    currentState = 'original';
+    updateOptions(selector, originalOptions);
+  }
+
+  
+    var elem = document.getElementById("myButton1");
+    if (elem.value=="Internal") elem.value = "External";
+    else elem.value = "Internal";}
+
+
+
+function updateOptions(selector, options) {
+  while (selector.options.length > 0) {
+    selector.remove(0);
+  }
+  options.forEach((option) => {
+    const newOption = document.createElement('option');
+    newOption.text = option.text;
+    newOption.value = option.value;
+    selector.add(newOption);
+  });
+
+}
+
+
+
+
+
+
+// get selected value from selector, the commented out stuff is same but longer
+//const dropdown = document.getElementById('selector');
+//const selectedValueDisplay = document.getElementById('selectedValue');
+
+document.getElementById('selector').addEventListener('change', selection)// {
+//document.getElementById('selectedValue').textContent = this.value;
+   // });
+
+function selection(){// shows the selected value
+  document.getElementById('selectedValue').textContent = this.value;
+  var selected = this.value
+  console.log(selected);
+//add esp32 logic
+
+var msg = {
+
+  type: 'Selected',
+  value: selected
+
+};
+
+Socket.send(JSON.stringify(msg));
+
+
+}
+
+
+  //sliders
+// const slider1 = getElementById("ctr1");
+// const valuespan1 = document.getElementById('value1');
+
+// slider1.addEventListener('input', slider1_change)
+
+// function slider1_change(){
+//   // get value
+//   const l_crt1 = slider1.value;
+//   // Update the span element with the value
+//   valueSpan.textContent = sliderValue;
+//   console.log(sliderValue);
+
+
+// }
+// var slider1 = document.getElementById('ctr1');
+// var valueSpan1 = document.getElementById('value1');
+
+// var slider2 = document.getElementById('ctr2');
+// var valueSpan2 = document.getElementById('value2');
+
+
+// var slider2 = document.getElementById('ctr3');
+// var valueSpan3 = document.getElementById('value3');
+
+
+//   function updateSliderValue1() {
+//     // Get the slider value
+//     var sliderValue1 = slider1.value;
+
+//     // Update the span element with the value
+//     valueSpan1.textContent = sliderValue1;
+
+//     // Log the value to the console
+//     console.log('Slider1:', sliderValue1);
+//   }
+//   // Attach the function to the 'input' event
+//   slider1.addEventListener('input', updateSliderValue1);
+
+  
+
+//   function updateSliderValue2() {
+//     // Get the slider value
+//     var sliderValue2 = slider2.value;
+
+//     // Update the span element with the value
+//     valueSpan2.textContent = sliderValue2;
+
+//     // Log the value to the console
+//     console.log('Slider2:', sliderValue2);
+//   }
+//   // Attach the function to the 'input' event
+//   slider2.addEventListener('input', updateSliderValue2);
+
+
+// var slider1 = document.getElementById("ctr1");
+// var slider2 = document.getElementById("ctr2");
+// var slider3 = document.getElementById("ctr3");
+// var output1 = document.getElementById("value1");
+// var output2 = document.getElementById("value2");
+// var output3 = document.getElementById("value3");
+
+// output1.innerHTML = slider1.value; // Display the default slider value
+// output2.innerHTML = slider2.value;
+// output3.innerHTML = slider3.value;
+
+// // Update the current slider value (each time you drag the slider handle)
+// slider1.oninput = function() {
+//   output1.innerHTML = this.value;
+//   console.log(this.value);
+// }
+
+// slider2.oninput = function() {
+//   output2.innerHTML = this.value;
+//   console.log(this.value);
+// }
+
+// slider3.oninput = function() {
+//   output3.innerHTML = this.value;
+//   console.log(this.value);
+// }
+
+// const slider1 = document.getElementById('ctr1');
+//     const slider2 = document.getElementById('ctr2');
+//     const slider3 = document.getElementById('ctr3');
+//     const valueSpan1 = document.getElementById('value1');
+//     const valueSpan2 = document.getElementById('value2');
+//     const valueSpan3 = document.getElementById('value3');
+
+//     // Function to update the span and console output
+//     function updateSliderValue(slider, span) {
+//       span.textContent = slider.value;
+//       console.log(`Slider value: ${slider.value}`);
+//     }
+
+//     // Event listeners for slider changes
+//     slider1.addEventListener('input', () => updateSliderValue(slider1, valueSpan1));
+//     slider2.addEventListener('input', () => updateSliderValue(slider2, valueSpan2));
+//     slider3.addEventListener('input', () => updateSliderValue(slider3, valueSpan3));
+
+  // Get references to the slider elements and their corresponding span elements
+  var slider1 = document.getElementById('ctr1');
+  var slider2 = document.getElementById('ctr2');
+  var slider3 = document.getElementById('ctr3');
+  var valueSpan1 = document.getElementById('value1');
+  var valueSpan2 = document.getElementById('value2');
+  var valueSpan3 = document.getElementById('value3');
+
+  // Event listeners for slider changes
+  slider1.addEventListener('input', function() {
+    valueSpan1.textContent = this.value; // Update the span value
+   // console.log("Slider 1 Value:", this.value); // Log the value to the console
+   var slider1val = this.value
+    console.log("Slider 1 Value:", slider1val);
+
+    //insert esp32 code here
+  
+    var msg = {
+      type: 'slider1',
+      value: slider1val
+
+      };
+      
+      Socket.send(JSON.stringify(msg));
+    
+  });
+
+  slider2.addEventListener('input', function() {
+    valueSpan2.textContent = this.value  ;
+    //console.log("Slider 2 Value:", this.value);
+
+    var slider2val = this.value
+    console.log("Slider 2 Value:", slider2val);
+
+    
+    //insert esp32 code here
+
+    var msg = {
+      type: 'slider2',
+      value: slider2val
+
+      };
+      
+      Socket.send(JSON.stringify(msg));
+    
+  });
+
+  slider3.addEventListener('input', function() {
+    valueSpan3.textContent = this.value;
+    var slider3val = this.value
+    console.log("Slider 3 Value:", slider3val);
+    //console.log("Slider 3 Value:", this.value);
+    
+    //insert esp32 code here
+
+
+    var msg = {
+      type: 'slider3',
+      value: slider3val
+
+      };
+      Socket.send(JSON.stringify(msg));
+      
+  });
+
+function processCommand(event){
+  var obj = JSON.parse(event.data);
+  var type = obj.type
+  if (type.localeCompare("slider1val") == 0 ) {
+    var slider1val = parseInt(obj.value);
+    console.log(slider1val);
+    slider1.value = slider1val;
+    output.innerHTML = slider1val;
+}
+
+window.onload = function(event){
+  init();
+}
+
+}   
+
+
+ </script>
+
+
+</html>

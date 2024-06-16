@@ -1,0 +1,54 @@
+Ideas for makig things work:
+
+
+
+
+
+User Fx-select:
+
+    userInput(Fx-select) ---> MCU ---> shift register // use shift register to select Fx using pins 16-18 (s0,s1,2)
+
+
+
+Pot Controles:
+    //control pots are a voltage divider between 3.3v and gnd to fv-1 pins 20,21,22 (pot0,1,2) , 
+    //so we should be able to send a voltage to the POT pins using a DAC to control fx
+
+    userInput(Controles) ---> MCU ---> DAC ---> FV-1 POT pins
+
+
+
+
+multiple eeproms:
+
+    userInput(adress) //user slelcts which eeprom
+
+    eeprom(1) ---> Mux() //sends sda to Mux
+    
+    eeprom(2) ---> Mux()
+
+    ...
+
+    eeprom(N) ---> Mux()
+
+    ESP32(userInput()) = dataOut //ESP32 reads adress then sends to Mux
+
+    dataOut ---> Mux(selectSDAline) ---> DSP //Mux sends to DSP
+
+
+InternalFx:
+    GPIO connects FV-1 Pin to ground or 0V at userInput 
+
+        GPIO(userSelect) ---> FV-1 = 0V //usinga bit on shift register
+        OR 
+        GPIO(userSelect) ---> transitor pulls FV-1 = GND
+
+
+
+
+
+
+
+// *note i know this code is terrible, will rewrite the whole thing and make it better/smaller and moreeffiecant once i get the proof of concept works
+
+
